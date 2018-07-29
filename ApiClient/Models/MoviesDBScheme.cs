@@ -5,7 +5,7 @@ using System.Text;
 
 namespace ApiClient.Models
 {
-    class MoviesDBScheme
+    public class MoviesDBScheme
     {
         [JsonProperty("actors")]
         public string ActorsPath { get; set; }

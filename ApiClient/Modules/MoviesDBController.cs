@@ -9,32 +9,13 @@ using Newtonsoft.Json;
 
 namespace ApiClient.Modules
 {
-    class MoviesDBController
+    public class MoviesDBController
     {
-        private static MoviesDBController instance = null;
-        private static readonly object padlock = new object();
         public MoviesDBScheme moviesDbScheme = new MoviesDBScheme();
-
-        public static MoviesDBController Instance
+        
+        public MoviesDBController()
         {
-            get
-            {
-                if (instance == null)
-                {
-                    lock (padlock)
-                    {
-                        if (instance == null)
-                        {
-                            instance = new MoviesDBController();
-                        }
-                    }
-                }
-                return instance;
-            }
-        }
-
-        MoviesDBController()
-        {
+            ServicePointManager.ServerCertificateValidationCallback += (sender, cert, chain, sslPolicyErrors) => true;
             moviesDbScheme = GetMoviesDBScheme();
         }
 
@@ -45,6 +26,7 @@ namespace ApiClient.Modules
                 var httpWebRequest = (HttpWebRequest)WebRequest.Create(Settings.GetClientRoute);
                 httpWebRequest.ContentType = Settings.GetContentType;
                 httpWebRequest.Method = "GET";
+                httpWebRequest.Timeout = Settings.GetTimeoutResponse;
                 var httpResponse = (HttpWebResponse)httpWebRequest.GetResponse();
                 using (var streamReader = new StreamReader(httpResponse.GetResponseStream()))
                 {
