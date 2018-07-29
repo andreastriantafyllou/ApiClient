@@ -57,10 +57,10 @@ namespace ApiClient.Modules
 
         public List<ActorModel> ReadAll()
         {
-            var httpResponse = db.CreateWebRequest(db.moviesDbScheme.ActorsPath, Settings.GetContentType, Settings.GetMethodGet, Settings.GetTimeoutResponse).GetResponse();
-            if (((HttpWebResponse)httpResponse).StatusCode == HttpStatusCode.OK)
+            var httpWebRequest = db.CreateWebRequest(db.moviesDbScheme.ActorsPath, Settings.GetContentType, Settings.GetMethodGet, Settings.GetTimeoutResponse).GetResponse();
+            if (((HttpWebResponse)httpWebRequest).StatusCode == HttpStatusCode.OK)
             {
-                using (var streamReader = new StreamReader(httpResponse.GetResponseStream()))
+                using (var streamReader = new StreamReader(httpWebRequest.GetResponseStream()))
                 {
                     var result = streamReader.ReadToEnd();
                     return JsonConvert.DeserializeObject<List<ActorModel>>(result);
@@ -68,7 +68,7 @@ namespace ApiClient.Modules
             }
             else
             {
-                throw new Exception(((HttpWebResponse)httpResponse).StatusCode.ToString());
+                throw new Exception(((HttpWebResponse)httpWebRequest).StatusCode.ToString());
             }
         }
 
@@ -76,17 +76,17 @@ namespace ApiClient.Modules
         {
             try
             {
-                var httpResponse = db.CreateWebRequest(db.moviesDbScheme.ActorsPath + id.ToString() + "/", Settings.GetContentType, Settings.GetMethodGet, Settings.GetTimeoutResponse).GetResponse();
-                if (((HttpWebResponse)httpResponse).StatusCode == HttpStatusCode.OK)
+                var httpWebRequest = db.CreateWebRequest(db.moviesDbScheme.ActorsPath + id.ToString() + "/", Settings.GetContentType, Settings.GetMethodGet, Settings.GetTimeoutResponse).GetResponse();
+                if (((HttpWebResponse)httpWebRequest).StatusCode == HttpStatusCode.OK)
                 {
-                    using (var streamReader = new StreamReader(httpResponse.GetResponseStream()))
+                    using (var streamReader = new StreamReader(httpWebRequest.GetResponseStream()))
                     {
                         var result = streamReader.ReadToEnd();
                         return JsonConvert.DeserializeObject<ActorModel>(result);
                     }
                 }
                 else {
-                    throw new Exception(((HttpWebResponse)httpResponse).StatusCode.ToString());
+                    throw new Exception(((HttpWebResponse)httpWebRequest).StatusCode.ToString());
                 }
             }
             catch (WebException ex)
@@ -106,9 +106,37 @@ namespace ApiClient.Modules
             }
         }
 
-        public string Update(int id)
+        public string Update(int id, ActorModel newObj)
         {
-            throw new NotImplementedException();
+            try
+            {
+                var httpWebRequest = db.CreateWebRequest(db.moviesDbScheme.ActorsPath + id.ToString() + "/", Settings.GetContentType, Settings.GetMethodPut, Settings.GetTimeoutResponse);
+                using (var streamWriter = new StreamWriter(httpWebRequest.GetRequestStream()))
+                {
+                    var json = JsonConvert.SerializeObject(newObj);
+
+                    streamWriter.Write(json);
+                    streamWriter.Flush();
+                    streamWriter.Close();
+                }
+
+                return ((HttpWebResponse)httpWebRequest.GetResponse()).StatusCode.ToString();
+            }
+            catch (WebException ex)
+            {
+                if (ex.Status == WebExceptionStatus.ProtocolError)
+                {
+                    throw new Exception("The item does not exist or path error.", ex);
+                }
+                else
+                {
+                    throw ex;
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
         }
     }
 }

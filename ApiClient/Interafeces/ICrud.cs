@@ -9,7 +9,7 @@ namespace ApiClient.Interafeces
         string Create(T obj);
         List<T> ReadAll ();
         T ReadById(int id);
-        string Update(int id);
+        string Update(int id, T newObj);
         string Delete(int id);
     }
 }
