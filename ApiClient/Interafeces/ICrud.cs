@@ -8,8 +8,8 @@ namespace ApiClient.Interafeces
     {
         string Create(T obj);
         List<T> ReadAll ();
-        T ReadById(string id);
-        string Update(string key);
-        string Delete(string key);
+        T ReadById(int id);
+        string Update(int id);
+        string Delete(int id);
     }
 }

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Net;
 using System.Text;
 using ApiClient.Interafeces;
 using ApiClient.Models;
@@ -20,7 +21,7 @@ namespace ApiClient.Modules
             throw new NotImplementedException();
         }
 
-        public string Delete(string key)
+        public string Delete(int id)
         {
             throw new NotImplementedException();
         }
@@ -28,19 +29,55 @@ namespace ApiClient.Modules
         public List<ActorModel> ReadAll()
         {
             var httpResponse = db.CreateWebRequest(db.moviesDbScheme.ActorsPath, Settings.GetContentType, Settings.GetMethodGet, Settings.GetTimeoutResponse).GetResponse();
-            using (var streamReader = new StreamReader(httpResponse.GetResponseStream()))
+            if (((HttpWebResponse)httpResponse).StatusCode == HttpStatusCode.OK)
             {
-                var result = streamReader.ReadToEnd();
-                return JsonConvert.DeserializeObject<List<ActorModel>>(result);
+                using (var streamReader = new StreamReader(httpResponse.GetResponseStream()))
+                {
+                    var result = streamReader.ReadToEnd();
+                    return JsonConvert.DeserializeObject<List<ActorModel>>(result);
+                }
+            }
+            else
+            {
+                throw new Exception(((HttpWebResponse)httpResponse).StatusCode.ToString());
             }
         }
 
-        public ActorModel ReadById(string id)
+        public ActorModel ReadById(int id)
         {
-            throw new NotImplementedException();
+            try
+            {
+                var httpResponse = db.CreateWebRequest(db.moviesDbScheme.ActorsPath + id.ToString() + "/", Settings.GetContentType, Settings.GetMethodGet, Settings.GetTimeoutResponse).GetResponse();
+                if (((HttpWebResponse)httpResponse).StatusCode == HttpStatusCode.OK)
+                {
+                    using (var streamReader = new StreamReader(httpResponse.GetResponseStream()))
+                    {
+                        var result = streamReader.ReadToEnd();
+                        return JsonConvert.DeserializeObject<ActorModel>(result);
+                    }
+                }
+                else {
+                    throw new Exception(((HttpWebResponse)httpResponse).StatusCode.ToString());
+                }
+            }
+            catch (WebException ex)
+            {
+                if (ex.Status == WebExceptionStatus.ProtocolError)
+                {
+                    throw new Exception("The item does not exist or path error.", ex);
+                }
+                else
+                {
+                    throw ex;
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
         }
 
-        public string Update(string key)
+        public string Update(int id)
         {
             throw new NotImplementedException();
         }
