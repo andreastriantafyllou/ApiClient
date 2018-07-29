@@ -9,6 +9,43 @@
       Title="HomePage">
 
     <Grid Background="#FFC2C2C2">
-        
+        <ListView x:Name="ListDataView" HorizontalAlignment="Left" Height="234" Margin="79,31,0,0" VerticalAlignment="Top" Width="842">
+            <ListView.View>
+                <GridView>
+                    <GridViewColumn/>
+                </GridView>
+            </ListView.View>
+        </ListView>
+        <ComboBox x:Name="ComboBoxTables" HorizontalAlignment="Left" Margin="79,287,0,0" VerticalAlignment="Top" Width="120">
+            <ComboBoxItem Content="Actors" IsSelected="True"/>
+            <ComboBoxItem Content="Directors"/>
+            <ComboBoxItem Content="Movies"/>
+        </ComboBox>
+        <TextBox x:Name="TextBoxId" HorizontalAlignment="Left" Height="23" Margin="103,330,0,0" VerticalAlignment="Top" Width="96"/>
+        <Label Content="ID:" HorizontalAlignment="Left" Margin="79,330,0,0" VerticalAlignment="Top"/>
+        <Label Content="New Actor:" HorizontalAlignment="Left" Margin="93,375,0,0" VerticalAlignment="Top"/>
+        <Label Content="New Director:" HorizontalAlignment="Left" Margin="80,402,0,0" VerticalAlignment="Top"/>
+        <Label Content="New Movie:" HorizontalAlignment="Left" Margin="90,428,0,0" VerticalAlignment="Top"/>
+        <TextBox x:Name="TextBoxNameNewActor" HorizontalAlignment="Left" Height="23" Margin="230,378,0,0" VerticalAlignment="Top" Width="96"/>
+        <Label Content="Name:" HorizontalAlignment="Left" Margin="185,375,0,0" VerticalAlignment="Top"/>
+        <TextBox x:Name="TextBoxBirthdayNewActor" HorizontalAlignment="Left" Height="23" Margin="395,375,0,0" VerticalAlignment="Top" Width="96"/>
+        <Label Content="Birthday:" HorizontalAlignment="Left" Margin="334,375,0,0" VerticalAlignment="Top"/>
+        <TextBox x:Name="TextBoxNameNewDirector" HorizontalAlignment="Left" Height="23" Margin="230,409,0,0" VerticalAlignment="Top" Width="96"/>
+        <Label Content="Name:" HorizontalAlignment="Left" Margin="185,406,0,0" VerticalAlignment="Top"/>
+        <TextBox x:Name="TextBoxBirthdayNewDirector" HorizontalAlignment="Left" Height="23" Margin="395,405,0,0" VerticalAlignment="Top" Width="96"/>
+        <Label Content="Birthday:" HorizontalAlignment="Left" Margin="334,406,0,0" VerticalAlignment="Top"/>
+        <TextBox x:Name="TextBoxNameNewMovie" HorizontalAlignment="Left" Height="23" Margin="230,438,0,0" VerticalAlignment="Top" Width="96"/>
+        <Label Content="Name:" HorizontalAlignment="Left" Margin="185,435,0,0" VerticalAlignment="Top"/>
+        <TextBox x:Name="TextBoxYearNewMovie" HorizontalAlignment="Left" Height="23" Margin="395,438,0,0" VerticalAlignment="Top" Width="96"/>
+        <Label Content="Year:" HorizontalAlignment="Left" Margin="334,435,0,0" VerticalAlignment="Top"/>
+        <TextBox x:Name="TextBoxDirectorNewMovie" HorizontalAlignment="Left" Height="23" Margin="562,438,0,0" VerticalAlignment="Top" Width="96"/>
+        <Label Content="Director:" HorizontalAlignment="Left" Margin="501,435,0,0" VerticalAlignment="Top"/>
+        <TextBox x:Name="TextBoxActorsNewMovie" HorizontalAlignment="Left" Height="23" Margin="718,438,0,0" VerticalAlignment="Top" Width="96"/>
+        <Label Content="Actors:" HorizontalAlignment="Left" Margin="673,435,0,0" VerticalAlignment="Top"/>
+        <Button x:Name="ButtonGetAll" Content="GetAll" HorizontalAlignment="Left" Margin="162,502,0,0" VerticalAlignment="Top" Width="75" Click="ButtonGetAll_Click"/>
+        <Button x:Name="ButtonGetById" Content="GetById" HorizontalAlignment="Left" Margin="252,502,0,0" VerticalAlignment="Top" Width="75" Click="ButtonGetById_Click"/>
+        <Button x:Name="ButtonCreate" Content="Create" HorizontalAlignment="Left" Margin="346,502,0,0" VerticalAlignment="Top" Width="75" Click="ButtonCreate_Click"/>
+        <Button x:Name="ButtonUpdate" Content="Update" HorizontalAlignment="Left" Margin="436,502,0,0" VerticalAlignment="Top" Width="75" Click="ButtonUpdate_Click"/>
+        <Button x:Name="ButtonDelete" Content="Delete" HorizontalAlignment="Left" Margin="528,502,0,0" VerticalAlignment="Top" Width="75" Click="ButtonDelete_Click"/>
     </Grid>
 </Page>
