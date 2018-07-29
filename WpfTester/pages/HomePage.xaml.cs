@@ -12,6 +12,9 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using ApiClient.Modules;
+using ApiClient.Interafeces;
+using ApiClient.Models;
 
 namespace WpfTester.pages
 {
@@ -23,6 +26,16 @@ namespace WpfTester.pages
         public HomePage()
         {
             InitializeComponent();
+            ICrud<ActorModel> actorsManager = new ActorsController();
+            try
+            {
+                var data = actorsManager.ReadAll();
+                MessageBox.Show(data[0].Name);
+            }
+            catch (Exception e)
+            {
+                MessageBox.Show(e.Message);
+            }
         }
     }
 }
