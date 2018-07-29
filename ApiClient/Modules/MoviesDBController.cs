@@ -41,7 +41,8 @@ namespace ApiClient.Modules
         public HttpWebRequest CreateWebRequest(string path, string contentType, string method, int timeout)
         {
             var httpWebRequest = (HttpWebRequest)WebRequest.Create(path);
-            httpWebRequest.ContentType = contentType;
+            if (contentType != null)
+                httpWebRequest.ContentType = contentType;
             httpWebRequest.Method = method;
             httpWebRequest.Timeout = timeout;
 

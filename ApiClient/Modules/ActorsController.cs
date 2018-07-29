@@ -33,7 +33,26 @@ namespace ApiClient.Modules
 
         public string Delete(int id)
         {
-            throw new NotImplementedException();
+            try
+            {
+                var httpWebRequest = db.CreateWebRequest(db.moviesDbScheme.ActorsPath + id.ToString() + "/", null, Settings.GetMethodDelete, Settings.GetTimeoutResponse);
+                return ((HttpWebResponse)httpWebRequest.GetResponse()).StatusCode.ToString();
+            }
+            catch (WebException ex)
+            {
+                if (ex.Status == WebExceptionStatus.ProtocolError)
+                {
+                    throw new Exception("The item does not exist or path error.", ex);
+                }
+                else
+                {
+                    throw ex;
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
         }
 
         public List<ActorModel> ReadAll()
