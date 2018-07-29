@@ -4,7 +4,7 @@ using System.Text;
 
 namespace ApiClient.Interafeces
 {
-    interface ICrud<T>
+    public interface ICrud<T>
     {
         string Create(T obj);
         List<T> ReadAll ();
