@@ -12,10 +12,12 @@ namespace ApiClient.Modules
     public class MoviesDBController
     {
         public MoviesDBScheme moviesDbScheme = new MoviesDBScheme();
-        
+        HttpHelper httpHelper;
+
         public MoviesDBController()
         {
             ServicePointManager.ServerCertificateValidationCallback += (sender, cert, chain, sslPolicyErrors) => true;
+            httpHelper = new HttpHelper();
             moviesDbScheme = GetMoviesDBScheme();
         }
 
@@ -23,7 +25,7 @@ namespace ApiClient.Modules
         {
             try
             {
-                var httpResponse = CreateWebRequest(Settings.GetClientRoute, Settings.GetContentType, Settings.GetMethodGet, Settings.GetTimeoutResponse).GetResponse();
+                var httpResponse = httpHelper.CreateWebRequest(Settings.GetClientRoute, Settings.GetContentType, Settings.GetMethodGet, Settings.GetTimeoutResponse).GetResponse();
                 using (var streamReader = new StreamReader(httpResponse.GetResponseStream()))
                 {
                     var result = streamReader.ReadToEnd();
@@ -37,18 +39,5 @@ namespace ApiClient.Modules
             }
             return null;
         }
-
-        public HttpWebRequest CreateWebRequest(string path, string contentType, string method, int timeout)
-        {
-            var httpWebRequest = (HttpWebRequest)WebRequest.Create(path);
-            if (contentType != null)
-                httpWebRequest.ContentType = contentType;
-            httpWebRequest.Method = method;
-            httpWebRequest.Timeout = timeout;
-
-            return httpWebRequest;
-        }
-
-        
     }
 }

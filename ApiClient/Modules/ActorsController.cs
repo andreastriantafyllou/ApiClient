@@ -12,131 +12,37 @@ namespace ApiClient.Modules
     public class ActorsController : ICrud<ActorModel>
     {
         MoviesDBController db;
+        SharedCrudController crud;
+
         public ActorsController()
         {
             db = new MoviesDBController();
+            crud = new SharedCrudController();
         }
 
         public string Create(ActorModel obj)
         {
-            var httpWebRequest = db.CreateWebRequest(db.moviesDbScheme.ActorsPath, Settings.GetContentType, Settings.GetMethodPost, Settings.GetTimeoutResponse);
-            using (var streamWriter = new StreamWriter(httpWebRequest.GetRequestStream()))
-            {
-                var json = JsonConvert.SerializeObject(obj);
-
-                streamWriter.Write(json);
-                streamWriter.Flush();
-                streamWriter.Close();
-            }
-            return ((HttpWebResponse)httpWebRequest.GetResponse()).StatusCode.ToString();
+            return crud.Create(obj, db.moviesDbScheme.ActorsPath);
         }
 
         public string Delete(int id)
         {
-            try
-            {
-                var httpWebRequest = db.CreateWebRequest(db.moviesDbScheme.ActorsPath + id.ToString() + "/", null, Settings.GetMethodDelete, Settings.GetTimeoutResponse);
-                return ((HttpWebResponse)httpWebRequest.GetResponse()).StatusCode.ToString();
-            }
-            catch (WebException ex)
-            {
-                if (ex.Status == WebExceptionStatus.ProtocolError)
-                {
-                    throw new Exception("The item does not exist or path error.", ex);
-                }
-                else
-                {
-                    throw ex;
-                }
-            }
-            catch (Exception ex)
-            {
-                throw ex;
-            }
+            return crud.Delete(id, db.moviesDbScheme.ActorsPath + id.ToString() + "/");
         }
 
         public List<ActorModel> ReadAll()
         {
-            var httpWebRequest = db.CreateWebRequest(db.moviesDbScheme.ActorsPath, Settings.GetContentType, Settings.GetMethodGet, Settings.GetTimeoutResponse).GetResponse();
-            if (((HttpWebResponse)httpWebRequest).StatusCode == HttpStatusCode.OK)
-            {
-                using (var streamReader = new StreamReader(httpWebRequest.GetResponseStream()))
-                {
-                    var result = streamReader.ReadToEnd();
-                    return JsonConvert.DeserializeObject<List<ActorModel>>(result);
-                }
-            }
-            else
-            {
-                throw new Exception(((HttpWebResponse)httpWebRequest).StatusCode.ToString());
-            }
+            return JsonConvert.DeserializeObject<List<ActorModel>>(crud.ReadAll(db.moviesDbScheme.ActorsPath));
         }
 
         public ActorModel ReadById(int id)
         {
-            try
-            {
-                var httpWebRequest = db.CreateWebRequest(db.moviesDbScheme.ActorsPath + id.ToString() + "/", Settings.GetContentType, Settings.GetMethodGet, Settings.GetTimeoutResponse).GetResponse();
-                if (((HttpWebResponse)httpWebRequest).StatusCode == HttpStatusCode.OK)
-                {
-                    using (var streamReader = new StreamReader(httpWebRequest.GetResponseStream()))
-                    {
-                        var result = streamReader.ReadToEnd();
-                        return JsonConvert.DeserializeObject<ActorModel>(result);
-                    }
-                }
-                else {
-                    throw new Exception(((HttpWebResponse)httpWebRequest).StatusCode.ToString());
-                }
-            }
-            catch (WebException ex)
-            {
-                if (ex.Status == WebExceptionStatus.ProtocolError)
-                {
-                    throw new Exception("The item does not exist or path error.", ex);
-                }
-                else
-                {
-                    throw ex;
-                }
-            }
-            catch (Exception ex)
-            {
-                throw ex;
-            }
+            return JsonConvert.DeserializeObject<ActorModel>(crud.ReadById(id, db.moviesDbScheme.ActorsPath + id.ToString() + "/"));
         }
 
         public string Update(int id, ActorModel newObj)
         {
-            try
-            {
-                var httpWebRequest = db.CreateWebRequest(db.moviesDbScheme.ActorsPath + id.ToString() + "/", Settings.GetContentType, Settings.GetMethodPut, Settings.GetTimeoutResponse);
-                using (var streamWriter = new StreamWriter(httpWebRequest.GetRequestStream()))
-                {
-                    var json = JsonConvert.SerializeObject(newObj);
-
-                    streamWriter.Write(json);
-                    streamWriter.Flush();
-                    streamWriter.Close();
-                }
-
-                return ((HttpWebResponse)httpWebRequest.GetResponse()).StatusCode.ToString();
-            }
-            catch (WebException ex)
-            {
-                if (ex.Status == WebExceptionStatus.ProtocolError)
-                {
-                    throw new Exception("The item does not exist or path error.", ex);
-                }
-                else
-                {
-                    throw ex;
-                }
-            }
-            catch (Exception ex)
-            {
-                throw ex;
-            }
+            return crud.Update(id, newObj, db.moviesDbScheme.ActorsPath + id.ToString() + "/");
         }
     }
 }
