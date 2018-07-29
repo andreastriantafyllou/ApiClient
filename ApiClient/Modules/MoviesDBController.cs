@@ -23,11 +23,7 @@ namespace ApiClient.Modules
         {
             try
             {
-                var httpWebRequest = (HttpWebRequest)WebRequest.Create(Settings.GetClientRoute);
-                httpWebRequest.ContentType = Settings.GetContentType;
-                httpWebRequest.Method = "GET";
-                httpWebRequest.Timeout = Settings.GetTimeoutResponse;
-                var httpResponse = (HttpWebResponse)httpWebRequest.GetResponse();
+                var httpResponse = CreateWebRequest(Settings.GetClientRoute, Settings.GetContentType, Settings.GetMethodGet, Settings.GetTimeoutResponse).GetResponse();
                 using (var streamReader = new StreamReader(httpResponse.GetResponseStream()))
                 {
                     var result = streamReader.ReadToEnd();
@@ -40,6 +36,16 @@ namespace ApiClient.Modules
                 //Error Handle
             }
             return null;
+        }
+
+        public HttpWebRequest CreateWebRequest(string path, string contentType, string method, int timeout)
+        {
+            var httpWebRequest = (HttpWebRequest)WebRequest.Create(path);
+            httpWebRequest.ContentType = contentType;
+            httpWebRequest.Method = method;
+            httpWebRequest.Timeout = timeout;
+
+            return httpWebRequest;
         }
 
         

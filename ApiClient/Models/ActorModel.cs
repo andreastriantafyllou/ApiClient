@@ -5,7 +5,7 @@ using System.Text;
 
 namespace ApiClient.Models
 {
-    class ActorModel
+    public class ActorModel
     {
         [JsonProperty("id")]
         public int Id { get; set; }
