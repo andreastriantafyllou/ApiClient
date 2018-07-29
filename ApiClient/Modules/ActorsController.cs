@@ -16,9 +16,19 @@ namespace ApiClient.Modules
         {
             db = new MoviesDBController();
         }
+
         public string Create(ActorModel obj)
         {
-            throw new NotImplementedException();
+            var httpWebRequest = db.CreateWebRequest(db.moviesDbScheme.ActorsPath, Settings.GetContentType, Settings.GetMethodPost, Settings.GetTimeoutResponse);
+            using (var streamWriter = new StreamWriter(httpWebRequest.GetRequestStream()))
+            {
+                var json = JsonConvert.SerializeObject(obj);
+
+                streamWriter.Write(json);
+                streamWriter.Flush();
+                streamWriter.Close();
+            }
+            return ((HttpWebResponse)httpWebRequest.GetResponse()).StatusCode.ToString();
         }
 
         public string Delete(int id)
